@@ -86,7 +86,7 @@ class BorrowingRecordController
         $validator = Validator::make($request->all(), [
             'returned_at' => 'required|date|date_format:Y-m-d|after:yesterday',
         ], [
-            'returned_at.date_format' => 'The borrowing date must be in the format "y-m-d".',
+            'returned_at.date_format' => 'The returned date must be in the format "y-m-d".',
         ]);
 
         // Check if validation fails
@@ -98,7 +98,7 @@ class BorrowingRecordController
             // Find the borrowing record associated with the book and patron
             $borrowingRecord = BorrowingRecord::where('book_id', $bookId)
                 ->where('patron_id', $patronId)
-                ->whereNull('returned_at')
+                // ->whereNull('returned_at')
                 ->firstOrFail();
 
             // Update the borrowing record with the return date
@@ -107,7 +107,7 @@ class BorrowingRecordController
 
             // Return success response with the updated Borrowing Record resource
             return ApiController::respondWithSuccess(
-                true,
+                // true,
                 'Book returned successfully',
                 200
             );
