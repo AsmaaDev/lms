@@ -40,7 +40,7 @@ class PatronController
         $rules = [
             'name' => 'required|string',
             'phone' => 'required|string|regex:/^[0-9]{10}$/',
-            'email' => 'required|email',
+            'email' => 'required|string|max:20|unique:patrons,email,'
         ];
     
         $validator = Validator::make($request->all(), $rules);
@@ -66,7 +66,25 @@ class PatronController
      */
     public function update(Request $request, Patron $patron)
     {
-        //
+        $rules = [
+            'name' => 'required|string',
+            'phone' => 'required|string|regex:/^[0-9]{10}$/',
+            'email' => 'required|string|max:20|unique:patrons,email,' . $patron->id, 
+        ];
+
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return ApiController::respondWithError($validator->errors(), 422);
+        }
+
+        $updated = $patron->update($request->all());
+        
+        return $updated
+            ? ApiController::respondWithSuccess(new PatronResource($patron), 'Patron updated successfully', 200)
+            : ApiController::respondWithServerError('Failed to update the patron.');
+    
     }
 
     /**
