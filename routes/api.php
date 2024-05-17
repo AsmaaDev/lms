@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\BorrowingRecordController;
 Route::resource('books', BookController::class);
 Route::resource('patrons', PatronController::class);
 Route::post('/borrow/{bookId}/patron/{patronId}', [BorrowingRecordController::class, 'store']);
-Route::post('/return/{bookId}/patron/{patronId}', [BorrowingRecordController::class, 'returnBook']);
+Route::put('/return/{bookId}/patron/{patronId}', [BorrowingRecordController::class, 'returnBook']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
